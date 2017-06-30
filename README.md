@@ -1,4 +1,6 @@
-# ICMP-DHCP-ArduinoTester
+# ICMP-DHCP-ArduinoTester  
+Download the two libraries below and add to Arduino Library folder  
+
 
 https://github.com/BlakeFoster/Arduino-Ping
 

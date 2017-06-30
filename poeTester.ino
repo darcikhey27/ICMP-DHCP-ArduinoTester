@@ -20,12 +20,12 @@
 Adafruit_RGBLCDShield lcd;
 EthernetClient client;
 
-
+// the mac for your arduino 
 byte mac[] = {
   0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02
 };
 
-IPAddress pingAddr(8, 8, 8, 8 ); // ip address to ping
+IPAddress pingAddr(8, 8, 8, 8 ); // ip address to test ping
 //IPAddress pingAddr(192, 168, 252, 252); // ip address to ping
 SOCKET pingSocket = 0;
 char buffer [256];
@@ -34,12 +34,9 @@ ICMPPing ping(pingSocket, (uint16_t)random(0, 255));
 
 void setup() {
 
-  // Open serial communications and wait for port to open:
-
   lcd = Adafruit_RGBLCDShield();
   Serial.begin(9600);
   lcd.begin(16, 2);
-
 
   // init ping variables
 
@@ -48,8 +45,8 @@ void setup() {
   lcd.setBacklight(WHITE);
 
   // put a sleep time here
-
-
+  //sleep(2);
+  
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
     // no point in carrying on, so do nothing forevermore:
@@ -93,6 +90,7 @@ void loop() {
     if (buttons & BUTTON_LEFT) {
       lcd.print("LEFT ");
       lcd.setBacklight(GREEN);
+      //renewIP();
 
 
     }
@@ -135,8 +133,6 @@ void pinger() {
               echoReply.ttl);
               lcd.setBacklight(GREEN);
               printBottom("OK");
-              
-          
     }
     else {
       sprintf(buffer, "Echo request failed; %d", echoReply.status);
@@ -149,8 +145,6 @@ void pinger() {
   }
 
 }
-
-
 
 void showMenu() {
   printTop("U>newIP,L");

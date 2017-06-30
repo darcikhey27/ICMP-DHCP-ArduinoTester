@@ -20,7 +20,7 @@
 Adafruit_RGBLCDShield lcd;
 EthernetClient client;
 
-// the mac for your arduino 
+// the mac for your arduino
 byte mac[] = {
   0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02
 };
@@ -31,6 +31,7 @@ SOCKET pingSocket = 0;
 char buffer [256];
 ICMPPing ping(pingSocket, (uint16_t)random(0, 255));
 
+String ip = "";
 
 void setup() {
 
@@ -46,7 +47,7 @@ void setup() {
 
   // put a sleep time here
   //sleep(2);
-  
+
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
     // no point in carrying on, so do nothing forevermore:
@@ -72,18 +73,13 @@ void loop() {
     lcd.setCursor(0, 0);
 
     if (buttons & BUTTON_UP) {
-      lcd.print("Pinging 8.8.8.8");
-      //lcd.setBacklight(RED);
-      //pingGoogle();
-      // start Ethernet
-      Ethernet.begin(mac, Ethernet.localIP());
       pinger();
 
     }
     if (buttons & BUTTON_DOWN) {
       lcd.print("DOWN ");
       lcd.setBacklight(YELLOW);
-      //showMyIP();
+      showMyIP();
 
 
     }
@@ -110,13 +106,20 @@ void loop() {
 
     }
   }
-  
+
   lcd.setBacklight(WHITE);
   //printIPAddress();
-  
-} // end loop
 
+} // end loop
+void showMyIP() {
+  lcd.clear();
+  printTop("IP address:");
+  printBottom(ip);
+}
 void pinger() {
+  lcd.print("Pinging 8.8.8.8");
+  Ethernet.begin(mac, Ethernet.localIP());
+  
   for (int i = 0; i < 4; i++) {
     ICMPEchoReply echoReply = ping(pingAddr, 4);
 
@@ -131,8 +134,8 @@ void pinger() {
               REQ_DATASIZE,
               millis() - echoReply.data.time,
               echoReply.ttl);
-              lcd.setBacklight(GREEN);
-              printBottom("OK");
+      lcd.setBacklight(GREEN);
+      printBottom("OK");
     }
     else {
       sprintf(buffer, "Echo request failed; %d", echoReply.status);
@@ -199,7 +202,7 @@ void renewIPaddress() {
 void printIPAddress() {
   Serial.print("My IP address:");
   //Serial.println(ip);
-  String ip;
+  //String ip;
 
   for (byte thisByte = 0; thisByte < 4; thisByte++) {
     // print the value of each byte of the IP address:

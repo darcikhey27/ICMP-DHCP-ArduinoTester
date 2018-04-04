@@ -38,16 +38,13 @@ void setup() {
   lcd = Adafruit_RGBLCDShield();
   Serial.begin(9600);
   lcd.begin(16, 2);
-
+  uint8_t i = 0;
   // init ping variables
-
   printTop("PoE works");
   printBottom("Getting IP");
   lcd.setBacklight(WHITE);
-
-  // put a sleep time here
-  //sleep(2);
-
+  
+// check that an IP was obtained
   if (Ethernet.begin(mac) == 0) {
     Serial.println("Failed to configure Ethernet using DHCP");
     // no point in carrying on, so do nothing forevermore:
@@ -60,8 +57,7 @@ void setup() {
   printIPAddress();
 }
 
-uint8_t i = 0;
-
+// main loop
 void loop() {
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
@@ -80,30 +76,22 @@ void loop() {
       lcd.print("DOWN ");
       lcd.setBacklight(YELLOW);
       showMyIP();
-
-
     }
     if (buttons & BUTTON_LEFT) {
       lcd.print("LEFT ");
       lcd.setBacklight(GREEN);
       //renewIP();
-
-
     }
 
     if (buttons & BUTTON_RIGHT) {
       lcd.print("RIGHT ");
       lcd.setBacklight(TEAL);
-
-
-
     }
+    
     if (buttons & BUTTON_SELECT) {
       lcd.print("SELECT ");
       lcd.setBacklight(VIOLET);
       showMenu();
-
-
     }
   }
 
